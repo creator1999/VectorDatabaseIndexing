@@ -49,6 +49,11 @@ public class KD_Tree {
         System.out.println("KD-Tree Structure:");
         printTree(root, 0);
 
+        SearchKDTree search=new SearchKDTree();
+        int[] target= new int[]{4, 1, 8, 7, 2};
+        TreeNodes nearest=search.vectorSearch(root,null,Integer.MAX_VALUE,target);
+        System.out.println(Arrays.toString(nearest.arr));
+
 
     }
 }
