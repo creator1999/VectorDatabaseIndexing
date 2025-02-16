@@ -4,7 +4,7 @@ import java.util.*;
 
 public class BallTree {
 
-    public double[] find_mean(int[][] vectors){
+    public static double[] find_mean(int[][] vectors){
         double[] centroid =new double[vectors[0].length];
         for(int i=0;i<vectors.length;i++){
             for(int j=0;j<vectors[0].length;j++){
@@ -16,16 +16,16 @@ public class BallTree {
         }
         return centroid;
     }
-    public double findRadius(double[] centroid,int[][] vectors){
-        double radius=Double.MAX_VALUE;
+    public static double findRadius(double[] centroid,int[][] vectors){
+        double radius=Double.MIN_VALUE;
         for(int i=0;i<vectors.length;i++){
             double temp=Distance.euclideanDistance(centroid,vectors[i]);
-            radius=Math.min(radius,temp);
+            radius=Math.max(radius,temp);
         }
         return radius;
     }
 
-    public int[][] splitball(int[][] vectors){
+    public static List<int[][]> splitball(int[][] vectors){
         Comparator<int[]> cmt=(a,b)->{
             int sum=0;
             int sum1=0;
@@ -39,11 +39,11 @@ public class BallTree {
         Arrays.sort(vectors,cmt);
         List<int[]> first=new ArrayList<>();
         List<int[]> second=new ArrayList<>();
-        int[] fir=new int[vectors[0].length];
-        int[] sec=new int[vectors[0].length];
+        int[] fir=vectors[0];
+        int[] sec=vectors[vectors.length-1];
         first.add(vectors[0]);
         second.add(vectors[vectors.length-1]);
-        for(int i=0;i<vectors.length;i++){
+        for(int i=1;i<vectors.length-1;i++){
             double dis1=Distance.euclideanDistance(fir,vectors[i]);
             double dis2=Distance.euclideanDistance(sec,vectors[i]);
             if(dis1>dis2){
@@ -53,10 +53,21 @@ public class BallTree {
                 second.add(vectors[i]);
             }
         }
-
+        int[][] first1=new int[first.size()][vectors[0].length];
+        for(int i=0;i<first1.length;i++){
+            first1[i]=first.get(i);
+        }
+        int[][] second1=new int[second.size()][vectors[0].length];
+        for(int i=0;i<second1.length;i++){
+            second1[i]=second.get(i);
+        }
+        List<int[][]> fin=new ArrayList<>();
+        fin.add(first1);
+        fin.add(second1);
+        return fin;
 
     }
-    public void BallTreeBfs(int[][] vectors){
+    public static BallTreeNode BallTreeBfs(int[][] vectors){
         Queue<BallTreeNode> balls=new ArrayDeque<>();
         double[] root_centroid=find_mean(vectors);
         double radius=findRadius(root_centroid,vectors);
@@ -65,11 +76,29 @@ public class BallTree {
         while (!balls.isEmpty()){
             BallTreeNode temp=balls.poll();
             int[][] vec=temp.vetors;
-            int[][] splitted=splitball(vec);
-            int[] fir=splitted[0];
-            int[] sec=splitted[1];
+            List<int[][]> fin=splitball(vec);
+            int[][] fir=fin.get(0);
+            int[][] sec=fin.get(1);
+            double[] c1=find_mean(fir);
+            double[] c2=find_mean(sec);
+            double r1=findRadius(c1,fir);
+            double r2=findRadius(c2,sec);
+            BallTreeNode left=new BallTreeNode(fir,r1);
+            BallTreeNode right=new BallTreeNode(sec,r2);
+            temp.left=left;
+            temp.right=right;
+            temp.clearArray();
+            if(left.vetors.length>2){
+                balls.add(left);
+            }
+            if(right.vetors.length>2){
+                balls.add(right);
+            }
+
+
 
         }
+        return root;
 
 
 
@@ -79,6 +108,7 @@ public class BallTree {
                 {3, 7, 2, 9, 1},{5, 8, 4, 0, 6}, {9, 2, 6, 3, 5}, {4, 1, 8, 7, 2}, {0, 5, 3, 6, 4},
                 {7, 3, 1, 5, 8}, {2, 9, 7, 4, 0}, {6, 4, 0, 2, 9}, {1, 8, 5, 3, 7}, {5, 0, 9, 8, 3}
         };
+        System.out.println(BallTreeBfs(vectors));
 
     }
 }
