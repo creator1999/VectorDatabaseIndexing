@@ -1,4 +1,4 @@
-package org.example;
+package org.example.KDTree;
 
 public class TreeNodes {
     int[] arr;

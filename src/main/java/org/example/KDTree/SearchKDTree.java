@@ -1,6 +1,4 @@
-package org.example;
-
-import com.sun.source.tree.Tree;
+package org.example.KDTree;
 
 public class SearchKDTree {
     public  double euclideanDistance(int[] a, int[] b) {
