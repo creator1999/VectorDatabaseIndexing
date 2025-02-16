@@ -8,10 +8,13 @@
 ## 🚀 Features
 
 - **Algorithm Implementations**
-  - Ball Tree (Current implementation)
-  - Annoy-like Random Projection Trees (Planned)
+  - Ball Tree (Completed)
+  - K-Dimension Tree (Completed)
+  - Custom INV+Ball Tree Hybrid (In Development)
+  - Supervised Learning with indexes (Planned)
   - HNSW (Hierarchical Navigable Small World) - In Development
   - Custom FAISS-inspired optimizations (Planned)
+  - 
   
 - **Optimization Focus**
   - Memory-efficient data structures
