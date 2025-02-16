@@ -71,7 +71,7 @@ public class BallTree {
         Queue<BallTreeNode> balls=new ArrayDeque<>();
         double[] root_centroid=find_mean(vectors);
         double radius=findRadius(root_centroid,vectors);
-        BallTreeNode root=new BallTreeNode(vectors,radius);
+        BallTreeNode root=new BallTreeNode(vectors,radius,root_centroid);
         balls.add(root);
         while (!balls.isEmpty()){
             BallTreeNode temp=balls.poll();
@@ -83,8 +83,8 @@ public class BallTree {
             double[] c2=find_mean(sec);
             double r1=findRadius(c1,fir);
             double r2=findRadius(c2,sec);
-            BallTreeNode left=new BallTreeNode(fir,r1);
-            BallTreeNode right=new BallTreeNode(sec,r2);
+            BallTreeNode left=new BallTreeNode(fir,r1,c1);
+            BallTreeNode right=new BallTreeNode(sec,r2,c2);
             temp.left=left;
             temp.right=right;
             temp.clearArray();
@@ -108,7 +108,10 @@ public class BallTree {
                 {3, 7, 2, 9, 1},{5, 8, 4, 0, 6}, {9, 2, 6, 3, 5}, {4, 1, 8, 7, 2}, {0, 5, 3, 6, 4},
                 {7, 3, 1, 5, 8}, {2, 9, 7, 4, 0}, {6, 4, 0, 2, 9}, {1, 8, 5, 3, 7}, {5, 0, 9, 8, 3}
         };
-        System.out.println(BallTreeBfs(vectors));
+        BallTreeNode root=BallTreeBfs(vectors);
+        SearchBallTree stb=new SearchBallTree();
+        int[] ans=(stb.findNearest(root,new int[]{5, 8, 4, 0, 6}));
+        System.out.println(Arrays.toString(ans));
 
     }
 }
